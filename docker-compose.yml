@@ -23,7 +23,7 @@ services:
       dockerfile: lagoon/cli.dockerfile
     image: &cli-image ${COMPOSE_PROJECT_NAME:-demo-python-simple-flask}-cli 
     labels:
-      lagoon.type: cli
+      lagoon.type: cli-persistent
       lagoon.persistent: /app/storage/ 
     << : *default-volumes 
     user: root
@@ -39,7 +39,7 @@ services:
       args:
         CLI_IMAGE: *cli-image 
     labels:
-      lagoon.type: nginx
+      lagoon.type: nginx-persistent
       lagoon.persistent.name: cli 
       lagoon.persistent: /app/storage/ 
     << : *default-volumes 
