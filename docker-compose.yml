@@ -39,9 +39,7 @@ services:
       args:
         CLI_IMAGE: *cli-image 
     labels:
-      lagoon.type: nginx-persistent
-      lagoon.persistent.name: cli 
-      lagoon.persistent: /app/storage/ 
+      lagoon.type: nginx
     << : *default-volumes 
     << : *default-user 
     depends_on:
