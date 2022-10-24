@@ -8,4 +8,4 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /app
 RUN pip install gunicorn
 
-CMD ["gunicorn","-w","4", "-b","0.0.0.0", "aiohello:app", "--access-logfile=-"]
+CMD ["gunicorn","-w","4", "-b","0.0.0.0:8800", "aiohello:app", "--access-logfile=-"]
