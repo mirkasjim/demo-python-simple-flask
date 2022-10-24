@@ -1,0 +1,77 @@
+version: '2.3'
+
+x-volumes:
+  &default-volumes
+    volumes:
+      - .:/app:delegated 
+
+x-environment:
+  &default-environment
+    LAGOON_ROUTE: &default-url http://${COMPOSE_PROJECT_NAME:-demo-python-simple-flask}.docker.amazee.io
+    # Uncomment if you like to have the system behave like in production
+    #LAGOON_ENVIRONMENT_TYPE: production
+
+x-user:
+  &default-user
+    user: '1000'
+
+services:
+
+  cli: 
+    build:
+      context: .
+      dockerfile: lagoon/cli.dockerfile
+    image: &cli-image ${COMPOSE_PROJECT_NAME:-demo-python-simple-flask}-cli 
+    labels:
+      lagoon.type: python-persistent
+      lagoon.persistent: /app/storage/ 
+    << : *default-volumes 
+    user: root
+    volumes_from: 
+      - container:amazeeio-ssh-agent 
+    environment:
+      << : *default-environment 
+
+  nginx:
+    build:
+      context: .
+      dockerfile: lagoon/nginx.dockerfile
+      args:
+        CLI_IMAGE: *cli-image 
+    labels:
+      lagoon.type: nginx
+      lagoon.persistent.name: cli 
+      lagoon.persistent: /app/storage/ 
+    << : *default-volumes 
+    << : *default-user 
+    depends_on:
+      - cli 
+    environment:
+      << : *default-environment 
+      LAGOON_LOCALDEV_URL: *default-url
+    networks:
+      - amazeeio-network
+      - default
+
+  gunicorn:
+    build:
+      context: .
+      dockerfile: lagoon/gunicorn.dockerfile
+      args:
+        CLI_IMAGE: *cli-image
+    labels:
+      lagoon.type: python-persistent
+      lagoon.persistent.name: cli 
+      lagoon.persistent: /app/storage/ 
+    << : *default-volumes 
+    << : *default-user 
+    depends_on:
+      - cli 
+    environment:
+      << : *default-environment 
+    ports:
+      - "8000"
+
+networks:
+  amazeeio-network:
+    external: true

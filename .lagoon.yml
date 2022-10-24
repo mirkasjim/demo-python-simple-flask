@@ -1,0 +1,29 @@
+docker-compose-yaml: docker-compose.yml
+
+project: demo-python-simple-flask
+
+tasks:
+  pre-rollout:
+    - run:
+        name: aiocli pre
+        command: /app/aiocli.py pre
+        service: cli
+
+  post-rollout:
+    - run:
+        name: aiocli pre
+        command: /app/aiocli.py post
+        service: cli
+
+environments:
+  main:
+    cronjobs:
+      - name: aiocli cron
+        schedule: "M * * * *" # This will run the cron once per hour.
+        command: /app/aiocli.py cron
+        service: cli
+
+lagoon-sync:
+  files:
+    config:
+      sync-directory: "/app/storage"
