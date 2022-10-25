@@ -19,4 +19,4 @@ The goal of this repo is simple: Run a simple flask app on Lagoon using a "produ
  - Once all setup, git clone this repo, and run `docker-compose up`
 
 ## Lagoon Demo
- - A live demo lives on Lagoon: TODO ADD URL 
+ - A live demo lives on Lagoon: https://nginx.main.demo-python-simple-flask.de3.amazee.io/
