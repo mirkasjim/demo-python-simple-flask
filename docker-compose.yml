@@ -40,8 +40,7 @@ services:
         CLI_IMAGE: *cli-image 
     labels:
       lagoon.type: nginx
-    << : *default-volumes 
-    << : *default-user 
+    << : [*default-volumes, *default-user]    
     depends_on:
       - cli 
     environment:
@@ -62,8 +61,7 @@ services:
       lagoon.type: python-persistent
       lagoon.persistent.name: cli 
       lagoon.persistent: /app/storage/ 
-    << : *default-volumes 
-    << : *default-user 
+    << : [*default-volumes, *default-user]
     depends_on:
       - cli 
     environment:
