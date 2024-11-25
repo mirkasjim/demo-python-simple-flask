@@ -18,5 +18,6 @@ jobs:
       with:
         python-version: '3.10'
     - name: demo 
-      run: python klp.py 
+      run:  python klp.py 
+    - uses: actions/checkout@v4
 
